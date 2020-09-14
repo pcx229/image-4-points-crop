@@ -24,9 +24,11 @@ import org.apache.commons.math3.util.MathArrays;
  * of the cropped image.
  * 
  * usage: java -jar bin.jar [options] -c <list of four (x,y) coordinates> -i <file>
+ * 
  * crop an image using four points and adjust view perspective.
  * if output path was not provided the result image will be stored in the folder of the input image 
  * as [input image name]-4crop.[format]
+ *
  *  -c,--coords <list of four (x,y) coordinates>   coordinates that represent a rectangular shape,
  *                                                 arraignment is not relevant.
  *                                                 example: [(3,3),(16,56),(73,55),(62,14)]
@@ -110,9 +112,9 @@ public class ImageFourPointsCrop {
 	    		formatter.setWidth(100);
 	    		String pname = new File(ImageFourPointsCrop.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getName();
 	    		formatter.printHelp("java -jar " + pname + " [options] -c <list of four (x,y) coordinates> -i <file>", 
-	    							"crop an image using four points with adjusted perspective.\n" + 
+	    							"\ncrop an image using four points with adjusted perspective.\n" + 
 	    						    "if output path was not provided the result image will" +
-	    							" be stored in the folder of the input image\nas [input image name]-4crop.[format]", options, null, false);
+	    							" be stored in the folder of the input image\nas [input image name]-4crop.[format]\n\n", options, null, false);
 	        	System.exit(0);
 	        }
 	        // output file
@@ -241,25 +243,32 @@ public class ImageFourPointsCrop {
         double PX, PY, PW;
     	double[][] temp = new double[4][4];
 		double[] pixel = new double[4];
-        for(int px=0;px<width;px++) {
-            for(int py=0;py<height;py++) {
-            	PW = px*mmt[2][0] + py*mmt[2][1] + mmt[2][2];
-            	PX = (px*mmt[0][0] + py*mmt[0][1] + mmt[0][2]) / PW;
-            	PY = (px*mmt[1][0] + py*mmt[1][1] + mmt[1][2]) / PW;
-            	
-            	// average pixel value relative to its floating point position
-        		double dx = PX - (int)PX, dy = PY - (int)PY;
-        		double tl = (1-dx)*(1-dy), tr = dx*(1-dy), bl = (1-dx)*dy, br = dx*dy;
-        		org_roster.getPixel((int)PX, (int)PY, temp[0]);
-        		org_roster.getPixel((int)PX+1, (int)PY, temp[1]);
-        		org_roster.getPixel((int)PX, (int)PY+1, temp[2]);
-        		org_roster.getPixel((int)PX+1, (int)PY+1, temp[3]);
-        		for(int i=0;i<4;i++) {
-        			pixel[i] = temp[0][i]*tl + temp[1][i]*tr + temp[2][i]*bl + temp[3][i]*br;
-        		}
-            	cp_roster.setPixel(px, py, pixel);
-            }
-        }
+		try {
+	        for(int px=0;px<width;px++) {
+	            for(int py=0;py<height;py++) {
+	            	PW = px*mmt[2][0] + py*mmt[2][1] + mmt[2][2];
+	            	PX = (px*mmt[0][0] + py*mmt[0][1] + mmt[0][2]) / PW;
+	            	PY = (px*mmt[1][0] + py*mmt[1][1] + mmt[1][2]) / PW;
+	            	
+	            	// average pixel value relative to its floating point position
+	        		double dx = PX - (int)PX, dy = PY - (int)PY;
+	        		double tl = (1-dx)*(1-dy), tr = dx*(1-dy), bl = (1-dx)*dy, br = dx*dy;
+	        		org_roster.getPixel((int)PX, (int)PY, temp[0]);
+	        		org_roster.getPixel((int)PX+1, (int)PY, temp[1]);
+	        		org_roster.getPixel((int)PX, (int)PY+1, temp[2]);
+	        		org_roster.getPixel((int)PX+1, (int)PY+1, temp[3]);
+	        		for(int i=0;i<4;i++) {
+	        			pixel[i] = temp[0][i]*tl + temp[1][i]*tr + temp[2][i]*bl + temp[3][i]*br;
+	        		}
+	            	cp_roster.setPixel(px, py, pixel);
+	            }
+	        }
+		} catch(ArrayIndexOutOfBoundsException e) {
+        	System.err.println("\nerror: pixels overflow, make sure the crop coordinates given are correct.\n" +
+        					   "       note that the image orientation cannot be identified, your image may be rotated\n"+
+        					   "       even if it viewed normal, if this is the case try to save it with the current orientation to a new file.");
+    	    System.exit(0);
+		}
 		
 		System.out.println("done!");
  
