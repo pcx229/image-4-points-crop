@@ -37,6 +37,8 @@ as [input image name]-4crop.[format]
 
 ## Example
 
+`java -jar MyProgram.jar --image "IMG_20200914_195400.jpg" --coords [(380,460),(1711,680),(1553,2050),(390,2353)] --output-format jpg`
+
 | original     | cropped       |
 |--------------|---------------| 
 |![Alt text](example/IMG_20200914_195400.jpg?raw=true "original") | ![Alt text](example/IMG_20200914_195400-4crop.jpg?raw=true "cropped")|
