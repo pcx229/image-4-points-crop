@@ -34,3 +34,9 @@ as [input image name]-4crop.[format]
  -o,--output-image <file>                       output image path  
     --output-format <format=png>                choose output format jpg or png(default)  
 ```
+
+## Example
+
+| original     | cropped       |
+|--------------|---------------| 
+|![Alt text](example/IMG_20200914_195400.jpg?raw=true "original") | ![Alt text](example/IMG_20200914_195400-4crop.jpg?raw=true "cropped")|
