@@ -3,6 +3,7 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -178,31 +179,32 @@ public class ImageFourPointsCrop {
 		}
 		WritableRaster org_roster = image.getRaster();
 		
-		// arrange points to left-top left-bottom right-top right-bottom
+		// arrange points to left-top right-top right-bottom left-bottom 
 		rectangle.sort(new Comparator<double[]>() {
-
 			@Override
 			public int compare(double[] a, double[] b) {
-				if(a[0] != b[0]) {
-					return (int) (a[0] - b[0]);
-				}
 				return (int) (b[1] - a[1]);
 			}
-			
 		});
-		
+		if(rectangle.get(0)[0] > rectangle.get(1)[0]) {
+			Collections.swap(rectangle, 0, 1);
+		}
+		if(rectangle.get(2)[0] < rectangle.get(3)[0]) {
+			Collections.swap(rectangle, 2, 3);
+		}
+
 		// calculate size for cropped image
 		int width, height;
-		width = (int) Math.max(MathArrays.distance(rectangle.get(0), rectangle.get(2)), MathArrays.distance(rectangle.get(1), rectangle.get(3)));
-		height = (int) Math.max(MathArrays.distance(rectangle.get(0), rectangle.get(1)), MathArrays.distance(rectangle.get(2), rectangle.get(3)));
+		width = (int) Math.max(MathArrays.distance(rectangle.get(0), rectangle.get(1)), MathArrays.distance(rectangle.get(2), rectangle.get(3)));
+		height = (int) Math.max(MathArrays.distance(rectangle.get(0), rectangle.get(3)), MathArrays.distance(rectangle.get(1), rectangle.get(2)));
 		
 		System.out.println("Cropped image size " + width + "x" + height + "px");
 
 		// calculate multiplication matrix
-		double[][] rc1 = { {0, 0},		{width, 0}, 
-					       {0, height}, {width, height} };
-		double[][] rc2 = { rectangle.get(1), rectangle.get(3), 
-						   rectangle.get(0), rectangle.get(2) };
+		double[][] rc1 = { {0, height}, {width, height}, 
+						   {width, 0},	{0, 0}	};
+		double[][] rc2 = { rectangle.get(0), rectangle.get(1), 
+						   rectangle.get(2), rectangle.get(3) };
 		
 		double[][] A = { { rc1[0][0], rc1[0][1], 1, 0, 0, 0, -rc2[0][0]*rc1[0][0], -rc2[0][0]*rc1[0][1], -rc2[0][0] },
 						 { 0, 0, 0, rc1[0][0], rc1[0][1], 1, -rc2[0][1]*rc1[0][0], -rc2[0][1]*rc1[0][1], -rc2[0][1] },
