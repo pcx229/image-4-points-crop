@@ -200,7 +200,7 @@ public class ImageFourPointsCrop {
 		
 		System.out.println("Cropped image size " + width + "x" + height + "px");
 
-		// calculate multiplication matrix
+		// find perspective transform matrix
 		double[][] rc1 = { {0, height}, {width, height}, 
 						   {width, 0},	{0, 0}	};
 		double[][] rc2 = { rectangle.get(0), rectangle.get(1), 
