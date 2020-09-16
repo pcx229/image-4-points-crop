@@ -262,6 +262,7 @@ public class ImageFourPointsCrop {
 	        		for(int i=0;i<4;i++) {
 	        			pixel[i] = temp[0][i]*tl + temp[1][i]*tr + temp[2][i]*bl + temp[3][i]*br;
 	        		}
+	        		
 	            	cp_roster.setPixel(px, py, pixel);
 	            }
 	        }
@@ -286,7 +287,8 @@ public class ImageFourPointsCrop {
 			}
 	        ImageIO.write(cropped, output_format, output);
 		} catch(IOException e) {
-        	System.err.println("error: failed to save image");
+        	System.err.println("error: failed to save image, path may be problematic try saving to a different directory " + 
+        							"that dose not contains spaces or Unicode Letters in the its path.");
     	    System.exit(0);
 		}
         
