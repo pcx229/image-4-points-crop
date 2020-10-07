@@ -18,21 +18,26 @@ for **Apache Commons CLI** or **Apache Commons Math** library respectively, fina
 
 ## command line
 ```
-Usage: java -jar bin.jar [options] -c <list of four (x,y) coordinates> -i <file>  
-  
-crop an image using four points and adjust view perspective.  
-if output path was not provided the result image will be stored in the folder of the input image  
-as [input image name]-4crop.[format]  
-  
- -c,--coords <list of four (x,y) coordinates>   coordinates that represent a rectangular shape,  
-                                                arraignment is not relevant.  
-                                                example: [(3,3),(16,56),(73,55),(62,14)]  
-                                                 note: if list contain spaces it should be  
-                                                 encapsulated with parentheses  
- -h,--help                                      print this message  
- -i,--image <file>                              input image path  
- -o,--output-image <file>                       output image path  
-    --output-format <format=png>                choose output format jpg or png(default)  
+usage: java -jar bin [options] -c <list of four (x,y) coordinates> -i <file>
+
+crop an image using four points with adjusted perspective.
+if output path was not provided the result image will be stored in the folder of the input image
+as [input image name]-4crop.[format]
+note: the image orientation cannot be identified, your image may be rotated
+even if it viewed normal, in this case the result will be corrupted, try to save it with the current
+orientation to a new file.
+
+ -c,--coords <list of four (x,y) coordinates>   coordinates that represent a rectangular shape,
+                                                arraignment is not relevant.
+                                                example: [(3,3),(16,56),(73,55),(62,14)]
+                                                note: if list contain spaces it should be
+                                                encapsulated with parentheses
+ -f,--output-format <format=png>                choose output format jpg or png(default)
+ -g,--gui                                       shows a graphical interface that the user can
+                                                interact with
+ -h,--help                                      print this message
+ -i,--image <file>                              input image path
+ -o,--output-image <file>                       output image path
 ```
 
 ## Example
@@ -45,3 +50,9 @@ java -jar MyProgram.jar --image "IMG_20200914_195400.jpg" --coords [(380,460),(1
 | original     | cropped       |
 |--------------|---------------| 
 |![Alt text](example/IMG_20200914_195400.jpg?raw=true "original") | ![Alt text](example/IMG_20200914_195400-4crop.jpg?raw=true "cropped")|
+
+**ui**
+```
+java -jar MyProgram.jar -g
+```
+![Alt text](screenshot.jpg?raw=true "screenshot") 
