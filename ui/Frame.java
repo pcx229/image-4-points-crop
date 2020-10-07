@@ -4,9 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -607,7 +605,6 @@ public class Frame extends JFrame {
 					langStrs.getString("error_msg_file_area_could_not_be_cropped_desc"),
 					langStrs.getString("error_msg_file_area_could_not_be_cropped_title"), 
 					JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
 			return;
 		}
 	}
@@ -654,9 +651,5 @@ public class Frame extends JFrame {
 				new Frame(image, coords, language);
 			}
 		});
-	}
-	
-	public static void main(String[] args) {
-		showWindow(new File("C:\\Torrents\\IMG_20191224_082745_s.jpg"), new int[][]{ {1300, 1480}, {2500, 1630}, {2360, 2830}, {1150, 3400} }, null);
 	}
 }
